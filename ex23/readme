@@ -1,0 +1,125 @@
+1. #ifndef FT_POINT_H:
+#ifndef is a preprocessor conditional directive in C.
+
+It stands for "if not defined".
+
+This checks whether the macro FT_POINT_H has been defined earlier in the code or in any header files included in the project.
+
+If FT_POINT_H is not defined, the code that follows this line (up to the matching #endif) will be included by the preprocessor.
+
+If FT_POINT_H is already defined, the code between #ifndef and #endif will be skipped.
+
+2. #define FT_POINT_H:
+#define is another preprocessor directive that defines a macro.
+
+In this case, #define FT_POINT_H defines the macro FT_POINT_H.
+
+This means, after this point in the code, any subsequent #ifndef FT_POINT_H checks will find that FT_POINT_H is defined, and the code between #ifndef and #endif will be skipped.
+
+Essentially, this is a way to ensure that the code between #ifndef and #endif is included only once in the compilation process, preventing multiple definitions of the same thing.
+
+3. The typedef struct s_point:
+typedef is used to create a new type alias.
+
+struct s_point is a structure definition. A structure is a user-defined data type in C that allows you to group different types of variables under a single name.
+
+s_point is the name of the structure, and t_point will be the new type alias for this structure (created by the typedef).
+
+Structure breakdown:
+
+c
+Copy
+Edit
+typedef struct s_point
+{
+        int     x;
+        int     y;
+}               t_point;
+s_point defines a structure with two members:
+
+x: an integer representing the x-coordinate.
+
+y: an integer representing the y-coordinate.
+
+t_point is a type alias for the structure struct s_point. This means that, after this line, you can declare variables of type t_point to represent points in 2D space, like so:
+
+c
+Copy
+Edit
+t_point point1;
+point1.x = 10;
+point1.y = 20;
+4. #endif:
+This marks the end of the conditional directive #ifndef.
+
+If FT_POINT_H was not defined previously, the code between #ifndef and #endif gets included; otherwise, it gets skipped.
+
+Why use #ifndef and #define together?
+This combination is used to prevent multiple inclusions of the same header file, which is known as an include guard.
+
+When you include a header file multiple times in your code (either directly or indirectly), it could cause errors like multiple definitions of structures, functions, or variables.
+
+The #ifndef and #define combo ensures that the code inside the file is only included once, no matter how many times the header is included.
+
+Example Usage:
+Let's imagine you have the following structure:
+
+header file: ft_point.h (this file contains your code above):
+
+c
+Copy
+Edit
+#ifndef FT_POINT_H
+# define FT_POINT_H
+
+typedef struct s_point
+{
+        int     x;
+        int     y;
+}               t_point;
+
+#endif
+Now, in your main program file (e.g., main.c), you can include this header file and use the t_point type:
+
+main.c:
+
+c
+Copy
+Edit
+#include "ft_point.h"
+
+int main() {
+    t_point p1;
+    p1.x = 5;
+    p1.y = 10;
+    
+    return 0;
+}
+If you accidentally include ft_point.h multiple times, the #ifndef FT_POINT_H check will ensure that the structure is only defined once, preventing errors.
+
+For example:
+
+c
+Copy
+Edit
+#include "ft_point.h"
+#include "ft_point.h"  // This second inclusion is safe due to the include guard.
+In summary:
+#ifndef FT_POINT_H checks if FT_POINT_H is defined. If it's not, the code inside the #ifndef/#endif block will be included.
+
+#define FT_POINT_H defines the macro FT_POINT_H, ensuring that the code is not included again in the future.
+
+The structure t_point is defined as a 2D point with x and y coordinates.
+
+This pattern prevents multiple definitions of the structure or other code, ensuring safe inclusion of the header file across multiple source files.
+
+This is a common technique in C to manage header files and avoid potential issues with multiple inclusions.
+
+
+
+
+
+
+
+
+
