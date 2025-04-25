@@ -1,0 +1,167 @@
+1. #include <fcntl.h>:
+The fcntl.h header file provides file control operations. In this program, it is primarily used to access the open() function for opening files.
+
+2. #include <unistd.h>:
+The unistd.h header file provides access to system calls and constants. It includes functions like read(), write(), and close(), which are used in this program to handle input/output operations on files.
+
+3. #define BUFFER_SIZE 1024:
+This defines a macro BUFFER_SIZE with a value of 1024. It will be used later to set the size of the buffer used to read data from the file.
+
+4. void ft_putstr_fd(char *str, int fd):
+This is a custom function that writes a string (str) to a specified file descriptor (fd).
+
+Parameters:
+
+str: A pointer to the string to be written.
+
+fd: The file descriptor where the string will be written (e.g., 1 for standard output, 2 for standard error).
+
+Inside the function:
+
+It loops over each character of the string str.
+
+For each character, it uses the write() system call to output the character to the file descriptor fd.
+
+5. int main(int argc, char **argv):
+This is the main function where the execution begins.
+
+Parameters:
+
+argc: The number of command-line arguments passed to the program.
+
+argv: An array of strings representing the command-line arguments.
+
+5.1 Argument Checks:
+The program first checks if the correct number of arguments has been passed:
+
+If there are less than 2 arguments (i.e., no filename is provided), it prints an error message: "File name missing.\n".
+
+If there are more than 2 arguments, it prints: "Too many arguments.\n".
+
+If there are invalid arguments (i.e., argc < 2 or argc > 2), the program returns 1, signaling an error, and exits early.
+
+5.2 Opening the File:
+The program tries to open the file specified by the first command-line argument (argv[1]), using the open() system call:
+
+c
+Copy
+Edit
+fd = open(argv[1], O_RDONLY);
+O_RDONLY: This flag specifies that the file should be opened in read-only mode.
+
+If open() fails (i.e., the file cannot be opened), it returns -1. In that case, the program prints: "Cannot read file.\n" and returns 1.
+
+5.3 Reading and Writing the File Content:
+If the file is opened successfully, the program reads data from the file into a buffer using the read() system call:
+
+c
+Copy
+Edit
+bytes_read = read(fd, buffer, BUFFER_SIZE);
+This reads up to BUFFER_SIZE bytes (1024 in this case) from the file into the buffer.
+
+The read() function returns the number of bytes actually read. If there is no more data to read, it will return 0.
+
+The program then enters a loop where it continues reading from the file and writing the data to standard output (1, the file descriptor for stdout):
+
+c
+Copy
+Edit
+while (bytes_read > 0)
+{
+        write(1, buffer, bytes_read);
+        bytes_read = read(fd, buffer, BUFFER_SIZE);
+}
+The loop continues until bytes_read is 0 (i.e., no more data to read).
+
+Each time through the loop, write(1, buffer, bytes_read) writes the data in buffer to standard output.
+
+5.4 Closing the File:
+Once all the data has been read and written, the program closes the file using the close() system call:
+
+c
+Copy
+Edit
+close(fd);
+This is necessary to release the file descriptor and free resources.
+
+6. Return Value:
+The program returns 0 to indicate successful completion.
+
+Key Concepts in the Program:
+File I/O:
+
+The program demonstrates how to perform basic file input/output using system calls in C (open(), read(), write(), and close()).
+
+Buffering:
+
+The program reads the file in chunks of BUFFER_SIZE (1024 bytes) into a buffer, then writes those chunks to the standard output.
+
+Error Handling:
+
+The program checks if the correct number of command-line arguments is provided and handles errors when the file cannot be opened.
+
+Custom Output Function (ft_putstr_fd):
+
+The function ft_putstr_fd() is a custom utility that mimics write() to print strings to a specified file descriptor, offering better control over error reporting (standard output vs. standard error).
+
+Example Usage:
+To run this program, compile it first and then execute it in a terminal:
+
+Compiling the Program:
+
+bash
+Copy
+Edit
+gcc -o read_file read_file.c
+Running the Program:
+
+If you pass no argument:
+
+bash
+Copy
+Edit
+./read_file
+Output:
+
+arduino
+Copy
+Edit
+File name missing.
+If you pass too many arguments:
+
+bash
+Copy
+Edit
+./read_file file.txt extra_arg
+Output:
+
+javascript
+Copy
+Edit
+Too many arguments.
+If you pass a valid filename:
+
+bash
+Copy
+Edit
+./read_file file.txt
+The program will read the content of file.txt and print it to the standard output.
+
+If the file cannot be opened (e.g., it doesn't exist), the program will output:
+
+arduino
+Copy
+Edit
+Cannot read file.
+In Summary:
+This program reads the content of a file specified by the user and writes that content to the terminal (stdout). It handles errors related to missing or incorrect arguments and handles file reading and writing using low-level system calls in C.
+
+
+
+
+
+
+
+
+
