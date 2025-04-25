@@ -1,0 +1,5 @@
+Safely guards against negative numbers
+
+✅ Prevents overflow by capping at nb > 12
+
+✅ Handles base cases (0!, 1!)

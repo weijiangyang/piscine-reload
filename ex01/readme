@@ -1,0 +1,3 @@
+echo xx > filename
+
+avec option -n pour sans le retour de la ligne. 
