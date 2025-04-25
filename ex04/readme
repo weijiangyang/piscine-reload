@@ -1,0 +1,80 @@
+Explanation:
+This command is used to show the MAC addresses (Ethernet addresses) of all network interfaces on a system.
+
+Let's look at the components:
+
+1. ip link show:
+ip is a powerful command-line tool for managing network interfaces in Linux.
+
+link show is a specific subcommand that displays information about network interfaces on the system.
+
+This includes details like interface names (eth0, wlan0, etc.), the state of the interface (up/down), and the MAC address (hardware address) associated with each network interface.
+
+Example output of ip link show:
+
+bash
+Copy
+Edit
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:1a:2b:3c:4d:5e brd ff:ff:ff:ff:ff:ff
+3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:1a:2b:3c:4d:5f brd ff:ff:ff:ff:ff:ff
+Here, the MAC address for eth0 is 00:1a:2b:3c:4d:5e, and for wlan0 it's 00:1a:2b:3c:4d:5f.
+
+2. | (Pipe):
+The pipe (|) takes the output of the command on the left side (ip link show) and passes it as input to the command on the right side (awk).
+
+Essentially, the ip link show command generates the interface details, and then awk processes that output.
+
+3. awk '/link\/ether/ {print $2}':
+awk is a powerful text-processing tool that operates on the output line by line.
+
+'/link\/ether/' is a regular expression (regex) pattern that matches lines containing link/ether. This is how ip link show displays the line with the MAC address:
+
+link/ether is the pattern that precedes the MAC address in the output of ip link show.
+
+\/ is used to escape the / character (since / is a special character in awk).
+
+{print $2}:
+
+{} specifies the action to take when a line matches the pattern.
+
+$2 refers to the second field (column) of the line, which, in the case of link/ether, is the MAC address.
+
+For example, in the line:
+
+bash
+Copy
+Edit
+link/ether 00:1a:2b:3c:4d:5e brd ff:ff:ff:ff:ff:ff
+awk will print the second column, which is 00:1a:2b:3c:4d:5e (the MAC address).
+
+In summary:
+ip link show displays network interface information.
+
+The pipe | sends that output to awk.
+
+awk filters the lines containing link/ether and prints the second field (the MAC address).
+
+Example:
+Output of ip link show:
+
+bash
+Copy
+Edit
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:1a:2b:3c:4d:5e brd ff:ff:ff:ff:ff:ff
+3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:1a:2b:3c:4d:5f brd ff:ff:ff:ff:ff:ff
+After running ip link show | awk '/link\/ether/ {print $2}', the output will be:
+
+makefile
+Copy
+Edit
+00:1a:2b:3c:4d:5e
+00:1a:2b:3c:4d:5f
+This gives you the MAC addresses of all network interfaces.
