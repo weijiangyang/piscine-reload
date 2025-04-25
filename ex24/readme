@@ -1,0 +1,144 @@
+1. ` NAME = libft.a:
+NAME is a variable that defines the name of the output file.
+
+In this case, it is set to libft.a, which will be the static library created after compiling the object files (.o files).
+
+2. FLAG = -Wall -Wextra -Werror:
+FLAG is a variable that stores compiler flags to be used when compiling the source files.
+
+-Wall: Enables most of the warnings.
+
+-Wextra: Enables extra warnings that are not part of the default warnings.
+
+-Werror: Treats all warnings as errors (compilation will fail if there are any warnings).
+
+3. PATH_SRC = ./srcs/:
+PATH_SRC is a variable that defines the path to the source files.
+
+Here, it's set to the srcs/ folder. This means all the source files (.c files) are located in the ./srcs/ directory.
+
+4. SRC = $(PATH_SRC)ft_putchar.c $(PATH_SRC)ft_swap.c $(PATH_SRC)ft_putstr.c $(PATH_SRC)ft_strlen.c $(PATH_SRC)ft_strcmp.c:
+SRC is a variable that contains a list of all the source files that will be compiled to create the object files (.o files).
+
+The $(PATH_SRC) is prepended to each file name to define the full path to the source files. The source files are:
+
+ft_putchar.c
+
+ft_swap.c
+
+ft_putstr.c
+
+ft_strlen.c
+
+ft_strcmp.c
+
+5. OBJ = $(SRC:.c=.o):
+OBJ is a variable that defines a list of object files (.o files).
+
+This line uses a pattern substitution to convert all .c file extensions in the SRC variable to .o extensions.
+
+For example, $(PATH_SRC)ft_putchar.c becomes $(PATH_SRC)ft_putchar.o, and so on for the other source files.
+
+6. PATH_HEADER = ./includes/:
+PATH_HEADER is a variable that defines the path to the header files.
+
+The header files are located in the includes/ directory.
+
+7. all: $(NAME):
+The default target of the Makefile is all. This will be the first target to run when you simply type make in the terminal.
+
+The all target depends on $(NAME), which is the libft.a file. This means that make will attempt to build libft.a when make is called.
+
+8. $(NAME): $(OBJ):
+This rule specifies that to build $(NAME) (which is libft.a), the object files ($(OBJ)) are required.
+
+The command for this target is:
+
+bash
+Copy
+Edit
+ar rc $(NAME) $^
+ar: The ar command is used to create an archive (in this case, a static library).
+
+rc: These are flags for ar:
+
+r: Replace or add files to the archive.
+
+c: Create the archive if it doesn’t already exist.
+
+$(NAME): This is the output file (i.e., libft.a).
+
+$^: This is an automatic variable that represents all the prerequisites (the object files, $(OBJ)).
+
+9. $(PATH_SRC)%.o: $(PATH_SRC)%.c:
+This rule defines how to compile the source files (.c files) into object files (.o files).
+
+$(PATH_SRC)%.o matches object files (e.g., ./srcs/ft_putchar.o).
+
+$(PATH_SRC)%.c matches source files (e.g., ./srcs/ft_putchar.c).
+
+The rule says that to build an object file (%.o) from a source file (%.c), use the following command:
+
+bash
+Copy
+Edit
+cc $(FLAG) -I$(PATH_HEADER) -c $< -o $@
+cc: This is the C compiler.
+
+$(FLAG): These are the compiler flags (-Wall -Wextra -Werror).
+
+-I$(PATH_HEADER): This tells the compiler to look for header files in the $(PATH_HEADER) directory (i.e., ./includes/).
+
+-c $<: This tells the compiler to compile the source file ($<) into an object file. $< is the automatic variable that represents the first prerequisite (in this case, the .c file).
+
+-o $@: This specifies the output file ($@), which is the object file (.o).
+
+10. clean::
+The clean target is used to remove object files (.o files).
+
+The command is:
+
+bash
+Copy
+Edit
+rm -f $(OBJ)
+This removes all the object files ($(OBJ)), which are the compiled .o files.
+
+The -f flag forces removal without asking for confirmation.
+
+11. fclean: clean:
+The fclean target first runs the clean target (to remove the object files) and then also removes the static library (libft.a).
+
+The command is:
+
+bash
+Copy
+Edit
+rm -f $(NAME)
+This removes the static library (libft.a).
+
+12. re: fclean all:
+The re target is a common target for "rebuilding" the entire project.
+
+It first runs fclean (to remove all object files and the library) and then runs all (to rebuild the library).
+
+This ensures that the library and object files are completely rebuilt from scratch.
+
+Summary:
+This Makefile defines the build process for creating a static library (libft.a). Here's what it does:
+
+Compiles the source files (.c) into object files (.o).
+
+Archives the object files into a static library (libft.a) using the ar command.
+
+Provides targets for cleaning up (removing object files and the static library) and rebuilding everything from scratch.
+
+To use it:
+
+make will build the static library (libft.a).
+
+make clean will remove object files.
+
+make fclean will remove both object files and the static library.
+
+make re will clean and then rebuild everything.
