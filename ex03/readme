@@ -1,0 +1,78 @@
+Explanation:
+find .:
+
+find is a command used to search for files or directories.
+
+. refers to the current directory. This means that find will search in the current directory and all its subdirectories.
+
+-type f:
+
+This tells find to only look for files (ignoring directories, symlinks, etc.).
+
+-f stands for "file", so only regular files are selected.
+
+-name '*.sh':
+
+This is a name pattern.
+
+*.sh means any file whose name ends with .sh, which is typically used for shell script files.
+
+The * is a wildcard that matches any string of characters, so it will match files like script.sh, test.sh, hello_world.sh, etc.
+
+-exec:
+
+This allows find to execute a command on each file that matches the search criteria.
+
+In this case, -exec will execute the basename command on each file that matches the pattern.
+
+basename {} .sh:
+
+basename is a command that strips the directory path and optionally a suffix from the filename.
+
+{} is a placeholder for the current file found by find. It will be replaced by each file name one by one.
+
+.sh is the suffix that basename will remove from the file name.
+
+For example, if the file is script.sh, basename will strip off the .sh suffix and return script.
+
+So, for each file that ends in .sh, basename will remove .sh and return just the base name of the file.
+
+\;:
+
+The semicolon ; is used to end the -exec command.
+
+The backslash \ is used to escape the semicolon, because semicolons are special characters in the shell. Escaping it tells the shell to treat it as part of the command and not as a command separator.
+
+What happens when you run this command?
+It searches the current directory and subdirectories for files that match the pattern *.sh (i.e., files ending with .sh).
+
+For each file that matches, the basename command is executed to strip the .sh suffix from the file name.
+
+It prints the base name of each file without the .sh extension.
+
+Example:
+If your directory structure looks like this:
+
+bash
+Copy
+Edit
+./script.sh
+./test.sh
+./hello_world.sh
+./subdir/another_script.sh
+Running the command:
+
+bash
+Copy
+Edit
+find . -type f -name '*.sh' -exec basename {} .sh \;
+Would produce the following output:
+
+bash
+Copy
+Edit
+script
+test
+hello_world
+another_script
+Each file's name has been stripped of the .sh extension.
