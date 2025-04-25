@@ -1,0 +1,31 @@
+
+Pour changer les permission:
+	r : 4
+	w: 2
+	x: 1
+
+	command est chmod *** filename
+Pour changer le timestamp pour un fichier ou un dossier:
+	touch -t 10022020 filename(dossier name)
+Pour les liens entres deux fichiers ou dossiers:
+	1. lien symbolique:
+		un lien symbolique est comme un raccourci : il pointe vers un autre fichier ou do		 dossier, si l'origine est supprimme, le lien devient casse. 
+		commande :
+			ln -s <chemin_vers_original> <nom_du_lien>
+			ln -s /home/user/original.txt lien.txt
+	2. lien dur:
+		Un lien dur est une copie du pointeur vers les mêmes données sur le disque.
+		Même si tu supprimes l'original, le fichier est encore accessible via le lien dur		 commande:
+			ln <chemin_vers_original> <nom_du_lien>
+			ln original.txt lien_dur.txt
+		Tu ne peux pas créer de lien dur vers un dossier (sauf cas particuliers et permis		 sions root).
+		verifier un lien:
+			ls -l
+			Tu verras :
+
+				Pour un lien symbolique : lien.txt -> original.txt
+
+				Pour un lien dur : même inode, mais pas de flèche
+
+	
+ 
